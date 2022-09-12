@@ -8,10 +8,6 @@ import (
 var prefix = os.Getenv("HOME") + "todos"
 var Version string
 
-func printHelp() {
-
-}
-
 func main() {
 	cfg, err := getConfig()
 	if err != nil {
@@ -33,49 +29,72 @@ func main() {
 		return
 	}
 
+	var helps helpList = make([]help, 0)
+
 	//verbs
 	list := make(map[string]bool)
 	list["list"] = true
 	list["l"] = true
-	list["-l"] = true
+	helps = append(helps, help{
+		verb:        list,
+		description: "List todos. An argument can be an @word, @word or +word",
+	})
 
 	listAt := make(map[string]bool)
 	listAt["list@"] = true
 	listAt["l@"] = true
-	listAt["-l@"] = true
-	listAt["@"] = true
+	helps = append(helps, help{
+		verb:        listAt,
+		description: "List existing @words.",
+	})
 
 	listHash := make(map[string]bool)
 	listHash["list#"] = true
 	listHash["l#"] = true
-	listHash["-l#"] = true
-	listHash["#"] = true
+	helps = append(helps, help{
+		verb:        listHash,
+		description: "List existing #words.",
+	})
 
 	listPlus := make(map[string]bool)
 	listPlus["list+"] = true
 	listPlus["l+"] = true
-	listPlus["-l+"] = true
-	listPlus["+"] = true
+	helps = append(helps, help{
+		verb:        listPlus,
+		description: "List existing +words.",
+	})
 
 	delete_ := make(map[string]bool)
 	delete_["delete"] = true
-	delete_["-d"] = true
 	delete_["d"] = true
+	helps = append(helps, help{
+		verb:        delete_,
+		description: "Delete a todo. The argument is a todo id.",
+	})
 
 	edit := make(map[string]bool)
 	edit["edit"] = true
-	edit["-e"] = true
 	edit["e"] = true
+	helps = append(helps, help{
+		verb:        edit,
+		description: "Edit a todo. Argument is a todo id. Editor can be set in the configuration file",
+	})
 
-	help := make(map[string]bool)
-	help["help"] = true
-	help["-h"] = true
-	help["h"] = true
+	help_ := make(map[string]bool)
+	help_["help"] = true
+	help_["h"] = true
+	helps = append(helps, help{
+		verb:        help_,
+		description: "Print this help message.",
+	})
 
 	version := make(map[string]bool)
 	version["version"] = true
-	version["-v"] = true
 	version["v"] = true
+	helps = append(helps, help{
+		verb:        version,
+		description: "Print current version.",
+	})
 
 	switch {
 	case list[os.Args[1]]:
@@ -126,12 +145,16 @@ func main() {
 			os.Exit(1)
 		}
 		return
+	case help_[os.Args[1]]:
+		printVersion()
+		helps.printHelp()
+		return
 	case version[os.Args[1]]:
 		printVersion()
 		return
 	default:
 		fmt.Fprintf(os.Stderr, "Unknonw command\n")
-		printHelp()
+		helps.printHelp()
 	}
 }
 
