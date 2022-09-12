@@ -7,9 +7,8 @@ COMMIT := $(shell git rev-parse --short HEAD)
 DATE := $(shell git log -1 --format=%cd --date=format:"%Y%m%d")
 
 ifneq ($(COMMIT), $(TAG_COMMIT))
-    VERSION := $(VERSION)-$(DATE)-$(COMMIT)
+	VERSION := $(VERSION)+$(DATE).$(COMMIT)
 endif
-
 
 build: 
 	go build -o t -ldflags="-extldflags -static -s -w -X 'main.Version=${VERSION}'" . 
