@@ -127,7 +127,7 @@ func main() {
 		}
 		return
 	case version[os.Args[1]]:
-		version()
+		printVersion()
 		return
 	default:
 		fmt.Fprintf(os.Stderr, "Unknonw command\n")
@@ -135,6 +135,6 @@ func main() {
 	}
 }
 
-func version() error {
+func printVersion() {
 	fmt.Printf("%s\n", Version)
 }
