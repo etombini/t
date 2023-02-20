@@ -14,7 +14,7 @@ import (
 
 type TodoItem struct {
 	Content  string
-	Priority int
+	Priority int      // based on "p1", "p2", "p3" being parsed in content, default is "p4"
 	Hashtags []string // #words in Content
 	Ats      []string // @words in Content
 	Plus     []string // +words in Content
@@ -131,11 +131,6 @@ func (tl *TodoList) List(args []string) error {
 		}
 
 		fmt.Printf("[%2d] %s %s\n", i, p, content)
-		// if i%2 == 1 {
-		// 	fmt.Printf("[%3d] %s\n", i, content)
-		// } else {
-		// 	fmt.Printf(color.New(color.BgBlack).SprintfFunc()("[%3d] %s\n", i, content))
-		// }
 	}
 	return nil
 }
@@ -230,6 +225,9 @@ func (tl *TodoList) Edit(args []string) error {
 		return err
 	}
 	edited = strings.TrimSpace(edited)
+	if edited == "" {
+		return nil
+	}
 
 	todo := TodoItem{
 		Priority: 4,
