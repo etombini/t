@@ -14,4 +14,4 @@ build:
 	go build -o t -ldflags="-extldflags -static -s -w -X 'main.Version=${VERSION}'" . 
 
 install:
-	go install -o t -ldflags="-extldflags -static -s -w -X 'main.Version=${VERSION}'" . 
+	go install -ldflags="-extldflags -static -s -w -X 'main.Version=${VERSION}'" . 
